@@ -26,15 +26,18 @@ class LoginFormState {
 
     @Nullable
     Integer getUsernameError() {
+        // retornar que o usuario nao esta cadastrado
         return usernameError;
     }
 
     @Nullable
     Integer getPasswordError() {
+        // retornar que a senha nao condiz com o usuario
         return passwordError;
     }
 
     boolean isDataValid() {
+        // Verificar aqui no banco se existe um registro de login+senha conforme digitado
         return isDataValid;
     }
 }

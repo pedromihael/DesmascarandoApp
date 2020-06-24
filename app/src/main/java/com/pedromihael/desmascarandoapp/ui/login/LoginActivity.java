@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.pedromihael.desmascarandoapp.MainActivity;
 import com.pedromihael.desmascarandoapp.R;
+import com.pedromihael.desmascarandoapp.RegisterActivity;
 import com.pedromihael.desmascarandoapp.ui.login.LoginViewModel;
 import com.pedromihael.desmascarandoapp.ui.login.LoginViewModelFactory;
 
@@ -42,9 +43,22 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button registerButton = findViewById(R.id.register);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+        loginButton.setOnClickListener(v -> {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            loginViewModel.login(usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString());
+        });
+
+        registerButton.setOnClickListener(view -> {
+            Toast.makeText(this, "aloooo", Toast.LENGTH_SHORT).show();
+            Intent registerActivity = new Intent(LoginActivity.this, RegisterActivity.class);
+            this.startActivity(registerActivity);
+        });
+
+       /* loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
@@ -58,9 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
                 }
             }
-        });
+        }); */
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        /* loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
                 if (loginResult == null) {
@@ -109,24 +123,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        });
+        }); */
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-            }
-        });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
         Intent homeIntent = new Intent(this, MainActivity.class);
         this.startActivity(homeIntent);
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

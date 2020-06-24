@@ -38,7 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if(mFragmentTitle.equals("Modelos")) {
             view = LayoutInflater.from(mContext).inflate(R.layout.card_item_model, parent, false);
         } else {
-            view = LayoutInflater.from(mContext).inflate(R.layout.card_item_brand, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.card_item_model, parent, false);
         }
 
         ViewHolder viewHolder = new ViewHolder(view);
@@ -84,7 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 tv_brand = itemView.findViewById(R.id.card_text_brand);
                 tv_model = itemView.findViewById(R.id.card_text_model);
             } else {
-                tv_brand = itemView.findViewById(R.id.brand_card_text_brand);
+                tv_brand = itemView.findViewById(R.id.card_item_model);
             }
 
         }
