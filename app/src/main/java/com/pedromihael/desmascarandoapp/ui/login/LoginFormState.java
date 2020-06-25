@@ -1,5 +1,7 @@
 package com.pedromihael.desmascarandoapp.ui.login;
 
+import android.widget.EditText;
+
 import androidx.annotation.Nullable;
 
 /**
@@ -25,19 +27,10 @@ class LoginFormState {
     }
 
     @Nullable
-    Integer getUsernameError() {
-        // retornar que o usuario nao esta cadastrado
-        return usernameError;
-    }
+    Integer getUsernameError() { return usernameError; }
 
     @Nullable
-    Integer getPasswordError() {
-        // retornar que a senha nao condiz com o usuario
-        return passwordError;
-    }
+    Integer getPasswordError() { return passwordError; }
 
-    boolean isDataValid() {
-        // Verificar aqui no banco se existe um registro de login+senha conforme digitado
-        return isDataValid;
-    }
+    boolean isDataValid() { return isDataValid; }
 }

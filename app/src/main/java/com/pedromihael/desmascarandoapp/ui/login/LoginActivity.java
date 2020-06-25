@@ -53,18 +53,21 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         registerButton.setOnClickListener(view -> {
-            Toast.makeText(this, "aloooo", Toast.LENGTH_SHORT).show();
             Intent registerActivity = new Intent(LoginActivity.this, RegisterActivity.class);
             this.startActivity(registerActivity);
         });
 
-       /* loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
+       loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+           /* Observer que monitora o preenchimento dos campos de login */
+           @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
                     return;
                 }
-                loginButton.setEnabled(loginFormState.isDataValid());
+                /* Quando campos de login nao estao nulo */
+              // loginButton.setEnabled(true);
+               loginButton.setEnabled(loginFormState.isDataValid());
+                /* Handle de erros de login - devem ser implementados */
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -72,9 +75,9 @@ public class LoginActivity extends AppCompatActivity {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
                 }
             }
-        }); */
+        });
 
-        /* loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
                 if (loginResult == null) {
@@ -105,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 // ignore
             }
 
+            // aparentemente passa os dados pra alguma classe com essa funcao
             @Override
             public void afterTextChanged(Editable s) {
                 loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
@@ -123,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return false;
             }
-        }); */
+        });
 
     }
 
