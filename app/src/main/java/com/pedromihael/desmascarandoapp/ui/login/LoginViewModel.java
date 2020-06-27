@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.content.Context;
 import android.util.Patterns;
 
 import com.pedromihael.desmascarandoapp.data.LoginRepository;
@@ -29,9 +30,10 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password) {
+    public void login(String username, String password, Context context) {
+
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        Result<LoggedInUser> result = loginRepository.login(username, password, context);
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
@@ -52,7 +54,6 @@ public class LoginViewModel extends ViewModel {
     }
 
     // A placeholder username validation check
-    // a conexão deve ser feita aqui
     private boolean isUserNameValid(String username) {
         if (username == null) {
             return false;
