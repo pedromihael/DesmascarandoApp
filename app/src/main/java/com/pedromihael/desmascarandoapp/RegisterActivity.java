@@ -15,6 +15,8 @@ import com.pedromihael.desmascarandoapp.ui.login.LoginActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private final DatabaseHelper dbHelper = new DatabaseHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +40,18 @@ public class RegisterActivity extends AppCompatActivity {
             String mPassword = passwordEditText.getText().toString();
 
             if (isFormValid(mName, mUsername, mPassword)) {
+                User user = new User(mName, mUsername, mPassword);
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                this.finish();
+
+                if (dbHelper.addUser(user)) {
+                    Toast.makeText(this, "Cadastrado com sucesso!", Toast.LENGTH_LONG).show();
+                    Intent homeIntent = new Intent();
+                    this.startActivity(homeIntent);
+                    this.finish();
+                } else {
+                    Toast.makeText(this, "Falha ao cadastrar! Tente novamente.", Toast.LENGTH_LONG).show();
+                }
+
             } else {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_LONG).show();
             }

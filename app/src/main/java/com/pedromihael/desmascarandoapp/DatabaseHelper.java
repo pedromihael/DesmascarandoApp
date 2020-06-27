@@ -1,8 +1,11 @@
 package com.pedromihael.desmascarandoapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -51,5 +54,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(dropUserTable);
         sqLiteDatabase.execSQL(dropPostTable);
         this.onCreate(sqLiteDatabase);
+    }
+
+    public boolean addUser(User user) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name", user.getName());
+        cv.put("email", user.getEmail());
+        cv.put("password", user.getPassword());
+
+        try {
+            db.insert("user", null, cv);
+            return true;
+        } catch (SQLiteException e) {
+            Log.d("SQLiteException-Insert", e.toString());
+        }
+
+        return false;
+
     }
 }
