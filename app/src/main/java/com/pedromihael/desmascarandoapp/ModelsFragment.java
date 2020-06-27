@@ -13,21 +13,21 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ModelsFragment extends Fragment {
+public class ModelsFragment extends Fragment implements RecyclerViewAdapter.OnPostListener{
 
     View mView;
     private RecyclerView mRecyclerView;
+    private ArrayList<Post> mPostsList;
 
-    public List<Cellphone> getmModelsList() {
-        return mModelsList;
+    public ArrayList<Post> getmPostsList() {
+        return mPostsList;
     }
 
-    public void setmModelsList(List<Cellphone> mModelsList) {
-        this.mModelsList = mModelsList;
+    public void setmPostsList(ArrayList<Post> mPostsList) {
+        this.mPostsList = mPostsList;
     }
-
-    private List<Cellphone> mModelsList;
 
     public ModelsFragment() { }
 
@@ -35,12 +35,12 @@ public class ModelsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CellPhoneOpenHelper helper = new CellPhoneOpenHelper(getActivity());
+        DatabaseHelper helper = new DatabaseHelper(getActivity());
 
-        mModelsList = new ArrayList<>();
+        mPostsList = new ArrayList<>();
 
-       for (Cellphone item : helper.retrieveModels()) {
-           mModelsList.add(item);
+       for (Post item : helper.getPosts()) {
+           mPostsList.add(item);
        }
 
     }
@@ -50,10 +50,18 @@ public class ModelsFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_models, container, false);
 
         mRecyclerView = mView.findViewById(R.id.models_recyclerview);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mModelsList, "Modelos");
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mPostsList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
 
         return mView;
     }
+
+    @Override
+    public void onPostClick(int position) {
+        Post clickedPost = mPostsList.get(position); //esse cara identifica qual card foi clicado
+        PostDialog dialog = new PostDialog();
+        dialog.show(requireActivity().getSupportFragmentManager(), "Post from " + clickedPost.getAuthor());
+    }
+
 }

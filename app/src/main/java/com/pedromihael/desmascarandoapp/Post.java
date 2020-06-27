@@ -6,9 +6,11 @@ public class Post {
 
     private Double latitude;
     private Double longitude;
-    private Date time;
+    private String time;
+    private String author;
 
-    public Post(Double latitude, Double longitude, Date time) {
+    public Post(String author, Double latitude, Double longitude, String time) {
+        this.author = author;
         this.latitude = latitude;
         this.longitude = longitude;
         this.time = time;
@@ -33,12 +35,17 @@ public class Post {
         this.longitude = longitude;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
+
+    public String getAuthor() { return author; }
+
+    public void setAuthor(String author) { this.author = author; }
+
 
 }

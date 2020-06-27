@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import java.util.List;
 
-public class NewCellphoneDialog extends AppCompatDialogFragment {
+public class PostDialog extends AppCompatDialogFragment {
 
     private EditText mEditTextModel;
     private EditText mEditTextBrand;
@@ -31,7 +31,7 @@ public class NewCellphoneDialog extends AppCompatDialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.new_cellphone_dialog, null);
+        View view = inflater.inflate(R.layout.new_cellphone_dialog, null); // trocar para dialog padrao
 
         builder.setView(view);
 
@@ -45,7 +45,7 @@ public class NewCellphoneDialog extends AppCompatDialogFragment {
             String model = mEditTextModel.getText().toString();
             CellPhoneOpenHelper helper = new CellPhoneOpenHelper(getContext());
 
-            if (hasNotNullAssurance(model, brand)) {
+            /* if (hasNotNullAssurance(model, brand)) {
                 if (isBrand(model, brand)) {
                     cellphone = new Cellphone(brand);
                 } else if (isDevice(model)) {
@@ -59,7 +59,7 @@ public class NewCellphoneDialog extends AppCompatDialogFragment {
                 Toast.makeText(view.getContext(),
             "Para cadastrar um dispositivo, insira todos os campos. Para cadastrar uma marca, insira apenas a marca",
                 Toast.LENGTH_SHORT).show();
-            }
+            } */
 
         });
 
@@ -80,56 +80,6 @@ public class NewCellphoneDialog extends AppCompatDialogFragment {
 
     }
 
-    private boolean isModelEmpty(String model) {
-        if (model.isEmpty() || model.equals(null)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean isBrandEmpty(String brand) {
-        if (brand.isEmpty() || brand.equals(null)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean hasNotNullAssurance(String model, String brand) {
-        if (isBrandEmpty(brand) && isModelEmpty(model)) {
-            return false;
-        }
-
-        if (isBrandEmpty(brand) && !isModelEmpty(model)) {
-            return false;
-        }
-
-        if (!isBrandEmpty(brand) && isModelEmpty(model)) {
-            return true;
-        }
-
-        return true;
-    }
-
-    private boolean isDevice(String model) {
-        if (!isModelEmpty(model)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean isBrand(String model, String brand) {
-        if (!isBrandEmpty(brand) && isModelEmpty(model)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public interface DialogListener {
-        void persistNewCellphoneData(Cellphone cellphone, CellPhoneOpenHelper helper);
-    }
+    public interface DialogListener { }
 }
 
