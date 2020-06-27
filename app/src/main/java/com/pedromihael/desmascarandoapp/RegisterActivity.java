@@ -53,33 +53,17 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
             } else {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Preencha todos os campos direito", Toast.LENGTH_LONG).show();
             }
-
-            /* if (mName.isEmpty()) {
-                Toast.makeText(this, "Insira seu nome!", Toast.LENGTH_LONG);
-            }
-            if (usernameEditText.getText().toString() == null) {
-                if (!Patterns.EMAIL_ADDRESS.matcher(usernameEditText.getText().toString()).matches()) {
-                    Toast.makeText(this, "Insira um email válido!", Toast.LENGTH_LONG);
-                }
-                else Toast.makeText(this, "Insira seu email!", Toast.LENGTH_LONG);
-            }
-            if (passwordEditText.getText().toString() == null) {
-                if (passwordEditText.getText().toString().length() < 5) {
-                    Toast.makeText(this, "Sua senha deve ter ao menos 5 dígitos", Toast.LENGTH_LONG);
-                }
-                else Toast.makeText(this, "Insira uma senha!", Toast.LENGTH_LONG);
-            } */
-
-            // adicionar ao banco.
-
         });
 
     }
 
     private boolean isFormValid(String name, String username, String password) {
-        // fazer validação campo a campo depois
-        return (name.length() != 0 && username.length() != 0 && password.length() != 0);
+        if (name.length() == 0) { return false; }
+        if (!username.contains("@") || !Patterns.EMAIL_ADDRESS.matcher(username).matches()) { return false; }
+        if (password.length() == 0 || password.trim().length() <= 5) { return false; }
+
+        return true;
     }
 }

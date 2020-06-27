@@ -20,8 +20,6 @@ public class LoginDataSource {
         DatabaseHelper dbHelper = new DatabaseHelper(context);
 
         try {
-            // TODO: handle loggedInUser authentication
-
             User user = new User(username, password);
             if (dbHelper.getUser(user)) {
                 Integer userId = dbHelper.getUserID(user);
