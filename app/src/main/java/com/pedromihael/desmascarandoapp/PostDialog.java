@@ -36,7 +36,7 @@ public class PostDialog extends AppCompatDialogFragment {
     private Uri uri;
     private ImageView img;
 
-    public NewCellphoneDialog(Uri uri){
+    public PostDialog(Uri uri){
         this.uri = uri;
     }
 

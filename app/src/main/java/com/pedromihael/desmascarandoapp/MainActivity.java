@@ -23,7 +23,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements NewCellphoneDialog.DialogListener {
+public class MainActivity extends AppCompatActivity implements PostDialog.DialogListener {
 
     private TabLayout mTabLayout;
     private AppBarLayout mAppBarLayout;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NewCellphoneDialo
     }
 
     private void openNewCellphoneDialog(Uri uri) {
-        NewCellphoneDialog dialog = new NewCellphoneDialog(uri);
+        PostDialog dialog = new PostDialog(uri);
         dialog.show(getSupportFragmentManager(), "New Cellphone");
     }
 
