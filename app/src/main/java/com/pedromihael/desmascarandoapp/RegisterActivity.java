@@ -33,7 +33,18 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         registerButton.setOnClickListener(v -> {
-            if (nameEditText.getText().toString() == null) {
+            String mName = nameEditText.getText().toString();
+            String mUsername = usernameEditText.getText().toString();
+            String mPassword = passwordEditText.getText().toString();
+
+            if (isFormValid(mName, mUsername, mPassword)) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                this.finish();
+            } else {
+                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_LONG).show();
+            }
+
+            /* if (mName.isEmpty()) {
                 Toast.makeText(this, "Insira seu nome!", Toast.LENGTH_LONG);
             }
             if (usernameEditText.getText().toString() == null) {
@@ -47,13 +58,16 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(this, "Sua senha deve ter ao menos 5 dígitos", Toast.LENGTH_LONG);
                 }
                 else Toast.makeText(this, "Insira uma senha!", Toast.LENGTH_LONG);
-            }
+            } */
 
             // adicionar ao banco.
 
-            loadingProgressBar.setVisibility(View.VISIBLE);
-            this.finish();
         });
 
+    }
+
+    private boolean isFormValid(String name, String username, String password) {
+        // fazer validação campo a campo depois
+        return (name.length() != 0 && username.length() != 0 && password.length() != 0);
     }
 }
