@@ -1,8 +1,12 @@
 package com.pedromihael.desmascarandoapp;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -52,4 +56,68 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(dropPostTable);
         this.onCreate(sqLiteDatabase);
     }
+
+    public boolean addUser(User user) {
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name", user.getName());
+        cv.put("email", user.getEmail());
+        cv.put("password", user.getPassword());
+
+        try {
+            db.insert("user", null, cv);
+            return true;
+        } catch (SQLiteException e) {
+            Log.d("SQLiteException-Insert", e.toString());
+        }
+
+        return false;
+    }
+
+    public boolean getUser(User user) {
+       String query = "SELECT COUNT(*) AS n FROM user WHERE email = \""
+            + user.getEmail() + "\" AND password = \""
+            + user.getPassword() + "\";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            if (cursor.getInt(cursor.getColumnIndex("n")) == 0) {
+                return false;
+            }
+        }
+
+        cursor.close();
+        return true;
+    }
+
+    public Integer getUserID(User user) {
+        String query = "SELECT user_id FROM user WHERE email = \""
+                + user.getEmail() + "\";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(cursor.getColumnIndex("user_id"));
+        }
+        cursor.close();
+        return -1;
+    }
+
+    public String getUserName(User user) {
+        String query = "SELECT name FROM user WHERE email = \""
+                + user.getEmail() + "\";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            return cursor.getString(cursor.getColumnIndex("name"));
+        }
+        cursor.close();
+        return null;
+    }
+
 }

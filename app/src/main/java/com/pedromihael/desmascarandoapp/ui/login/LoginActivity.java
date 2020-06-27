@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.pedromihael.desmascarandoapp.DatabaseHelper;
 import com.pedromihael.desmascarandoapp.MainActivity;
 import com.pedromihael.desmascarandoapp.R;
 import com.pedromihael.desmascarandoapp.RegisterActivity;
@@ -32,6 +34,7 @@ import com.pedromihael.desmascarandoapp.ui.login.LoginViewModelFactory;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    private DatabaseHelper dbHelper = new DatabaseHelper();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString());
+                    passwordEditText.getText().toString(), this);
         });
 
         registerButton.setOnClickListener(view -> {
@@ -123,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                            passwordEditText.getText().toString(), getApplicationContext());
                 }
                 return false;
             }
