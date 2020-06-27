@@ -3,10 +3,10 @@
     <string name="tab_text_1">Desmascarados</string>
     <string name="tab_text_2">Mapa</string>
 
-    <string name="dialog_placeholder_model">Modelo</string>
-    <string name="dialog_placeholder_brand">Marca</string>
+    <string name="dialog_placeholder_model">Endereço</string>
+    <string name="dialog_placeholder_brand">Horario</string>
     <string name="dialog_placeholder_year">Ano do modelo</string>
-    <string name="dialog_title">Novo modelo</string>
+    <string name="dialog_title">Novo Post</string>
     <string name="dialog_negative_button">Cancelar</string>
     <string name="dialog_positive_button">Adicionar</string>
     <string name="card_brand_brand">Marca</string>

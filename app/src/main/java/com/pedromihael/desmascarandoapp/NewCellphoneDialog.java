@@ -7,24 +7,38 @@ package com.pedromihael.desmascarandoapp;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NewCellphoneDialog extends AppCompatDialogFragment {
 
     private EditText mEditTextModel;
-    private EditText mEditTextBrand;
+    private TextView mEditTextBrand;
     private Button mCancelButton;
     private Button mConfirmButton;
     private DialogListener listener;
+    private Uri uri;
+    private ImageView img;
+
+    public NewCellphoneDialog(Uri uri){
+        this.uri = uri;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,6 +51,18 @@ public class NewCellphoneDialog extends AppCompatDialogFragment {
 
         mCancelButton = view.findViewById(R.id.cancel_button);
         mConfirmButton = view.findViewById(R.id.confirm_button);
+
+        /* Ele seta o horario do post e a imagem selecionada da galeria */
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        String dateformatted = dateFormat.format(date);
+        mEditTextBrand = view.findViewById(R.id.edit_brand);
+        mEditTextBrand.setText(dateformatted);
+
+        //Toast.makeText(getActivity(), mEditTextBrand.getText(), Toast.LENGTH_LONG).show();
+        img = view.findViewById(R.id.imagem_da_galeria);
+        img.setImageURI(uri);
+        /**/
 
         mCancelButton.setOnClickListener((v) -> this.dismiss());
         mConfirmButton.setOnClickListener((v) -> {

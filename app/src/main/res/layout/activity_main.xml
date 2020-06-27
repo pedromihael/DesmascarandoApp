@@ -58,4 +58,5 @@
         app:fabSize="auto"
         app:maxImageSize="30dp"
         app:srcCompat="@drawable/ic_menu_camera" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

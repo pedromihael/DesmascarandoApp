@@ -12,7 +12,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CellPhoneOpenHelper extends SQLiteOpenHelper {
+public class  CellPhoneOpenHelper extends SQLiteOpenHelper {
 
     private Context mContext = null;
     private static final int DATABASE_VERSION = 4;
