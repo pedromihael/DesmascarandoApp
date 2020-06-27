@@ -34,6 +34,7 @@
             app:tabSelectedTextColor="@color/textAccent"
             app:tabTextColor="@color/textNormal" />
 
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
@@ -56,5 +57,5 @@
         app:backgroundTint="#FF9800"
         app:fabSize="auto"
         app:maxImageSize="30dp"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@drawable/ic_menu_camera" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
