@@ -10,11 +10,15 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext = null;
     private static final String DATABASE_NAME = "desmascarando.db";
-    private static final Integer DATABASE_VERSION = 1;
+    private static final Integer DATABASE_VERSION = 2;
     SQLiteDatabase db = null;
 
     public DatabaseHelper() { super(null, DATABASE_NAME, null, DATABASE_VERSION); }
@@ -36,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     " );";
     private final String createTablePost =
             "CREATE TABLE post ( " +
-                    "time DATE NOT NULL, " +
+                    "time VARCHAR(128) NOT NULL, " +
                     "longitude DOUBLE NOT NULL, " +
                     "latitude DOUBLE NOT NULL, " +
                     "post_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -118,6 +122,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return null;
+    }
+
+    /* NAO TA FUNCIONANDO AINDA */
+    public ArrayList<Post> getPosts() {
+        String query = "SELECT * FROM post;";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        ArrayList<Post> results = new ArrayList<>();
+
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                String author, time;
+                double latitude, longitude;
+
+                author = cursor.getString(cursor.getColumnIndex("author"));
+                latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+                longitude = cursor.getDouble(cursor.getColumnIndex("longiture"));
+                time = cursor.getString(cursor.getColumnIndex("time"));
+
+                Post post = new Post(author, latitude, longitude, time);
+
+                if (!author.equals("")) {
+                    results.add(post);
+                }
+            }
+        }
+
+        cursor.close();
+
+        return results;
     }
 
 }
