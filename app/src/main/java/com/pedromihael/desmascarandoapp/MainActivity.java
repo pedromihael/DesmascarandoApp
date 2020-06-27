@@ -1,6 +1,12 @@
 package com.pedromihael.desmascarandoapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -14,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements NewCellphoneDialo
     private TabLayout mTabLayout;
     private AppBarLayout mAppBarLayout;
     private ViewPager mViewPager;
+    private final int CAPTURE_PHOTO = 102;
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +40,15 @@ public class MainActivity extends AppCompatActivity implements NewCellphoneDialo
         mViewPager.setAdapter(viewPagerAdapter); // sets up the adapter to the view pager
         mTabLayout.setupWithViewPager(mViewPager); // sets up the view pager (with adapter) to the corresponding tab
 
-        FloatingActionButton fab = findViewById(R.id.fab);
 
         /* BOTAO FLUTUANTE */
-        fab.setOnClickListener((v) -> openNewCellphoneDialog()); // deve ser substituido pra abrir camera
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            Intent i = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+//                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "propic.png";
+//                uri = Uri.parse(root);
+            startActivityForResult(i, CAPTURE_PHOTO);
+        });
     }
 
     private void openNewCellphoneDialog() {
