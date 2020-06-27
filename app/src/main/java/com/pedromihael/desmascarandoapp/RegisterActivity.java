@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (dbHelper.addUser(user)) {
                     Toast.makeText(this, "Cadastrado com sucesso!", Toast.LENGTH_LONG).show();
-                    Intent homeIntent = new Intent();
+                    Intent homeIntent = new Intent(this, MainActivity.class);
                     this.startActivity(homeIntent);
                     this.finish();
                 } else {
