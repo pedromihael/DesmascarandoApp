@@ -3,20 +3,23 @@ package com.pedromihael.desmascarandoapp;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.exifinterface.media.ExifInterface;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.location.LocationCallback;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     private ViewPager mViewPager;
 
     //Photo Variables
+    private static final int PERMISSION_REQUEST_CODE = 200;
     private final int CAPTURE_PHOTO = 100;
     private Uri uri;
     private String imgPath;
@@ -47,8 +51,13 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 
     ArrayList<Double> location;
 
+    //Location Variables
+    //private FusedLocationProviderClient fusedLocationClient;
+    //End Location
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -87,9 +96,15 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("image/*");
+            /* Choosefrom gallery */
+//            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//            intent.setType("image/*");
+//            startActivityForResult(intent, CAPTURE_PHOTO);
+            /**/
+
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAPTURE_PHOTO);
+
         });
 
     }
@@ -129,21 +144,113 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
-            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show();
-            } else {
-                getCurrentLocation();
-            }
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Granted",
+                            Toast.LENGTH_SHORT).show();
+                    // main logic
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=
+                                PackageManager.PERMISSION_GRANTED) {
+                            showMessageOKCancel("You need to allow access permissions",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermission();
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                }
+            case REQUEST_CODE_LOCATION_PERMISSION :
+                if (grantResults.length > 0) {
+                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                        Toast.makeText(this, "Location permission denied.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        getCurrentLocation();
+                    }
+                }
+                break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (checkPermission()) {
+            // Success
+        } else {
+            requestPermission();
+        }
+    }
+
+    private boolean checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            return false;
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_PHOTO) {
-            uri = data.getData();
-            openNewCellphoneDialog(uri);
+
+            /*Choose from gallery*/
+//            uri = data.getData();
+//            String[] projection = { MediaStore.Images.Media.DATA };
+//            Cursor cursor = getContentResolver().query(uri, projection, null, null,null);
+//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            String path = cursor.getString(column_index);
+
+
+            //openNewCellphoneDialog(uri);
+            /* */
+//            uri = data.getData();
+//            Bitmap bitmap = null;
+//            try {
+//                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            assert data != null;
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            openNewCellphoneDialog(bitmap);
+            //Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
         }
         else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
@@ -159,13 +266,11 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         Toast.makeText(this, teste, Toast.LENGTH_SHORT).show();
     }
 
-    private void openNewCellphoneDialog(Uri uri) {
-
+    private void openNewCellphoneDialog(Bitmap bitmap) {
         User author = new User("0");
         // trocar userID acima pelo passado no bundle (está vindo nulo)
-        PostDialog dialog = new PostDialog(uri, this, location, author);
+        PostDialog dialog = new PostDialog(bitmap, this, location, author);
         dialog.show(getSupportFragmentManager(), "New Post");
-
     }
 
 }
