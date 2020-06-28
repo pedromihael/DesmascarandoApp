@@ -40,6 +40,9 @@ public class PostDialog extends AppCompatDialogFragment {
         this.uri = uri;
     }
 
+    public PostDialog(){
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

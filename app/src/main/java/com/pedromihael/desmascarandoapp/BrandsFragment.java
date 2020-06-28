@@ -16,12 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BrandsFragment extends Fragment {
-
+public class BrandsFragment extends Fragment implements RecyclerViewAdapter.OnPostListener {
     View mView;
     private RecyclerView mRecyclerView;
-    private List<Cellphone> mBrandsList;
-    RecyclerViewAdapter mAdapter = new RecyclerViewAdapter(getContext(), mBrandsList, "Marcas");
+    private ArrayList<Post> mPostsList;
+
+    public ArrayList<Post> getmPostsList() {
+        return mPostsList;
+    }
+
+    public void setmPostsList(ArrayList<Post> mPostsList) {
+        this.mPostsList = mPostsList;
+    }
 
     public BrandsFragment() { }
 
@@ -29,29 +35,33 @@ public class BrandsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        CellPhoneOpenHelper helper = new CellPhoneOpenHelper(getActivity());
+        DatabaseHelper helper = new DatabaseHelper(getActivity());
 
-        mBrandsList = new ArrayList<>();
+        mPostsList = new ArrayList<>();
 
-        for (Cellphone item : helper.retrieveBrands()) {
-            mBrandsList.add(item);
-            mAdapter.updateView();
+        for (Post item : helper.getPosts()) {
+            mPostsList.add(item);
         }
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_brands, container, false);
+        mView = inflater.inflate(R.layout.fragment_models, container, false);
 
-        mRecyclerView = mView.findViewById(R.id.brands_recyclerview);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mBrandsList, "Marcas");
+        mRecyclerView = mView.findViewById(R.id.models_recyclerview);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mPostsList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
 
-        mAdapter = adapter;
-
         return mView;
+    }
+
+    @Override
+    public void onPostClick(int position) {
+        Post clickedPost = mPostsList.get(position); //esse cara identifica qual card foi clicado
+        PostDialog dialog = new PostDialog();
+        dialog.show(requireActivity().getSupportFragmentManager(), "Post from " + clickedPost.getAuthor());
     }
 
 }
