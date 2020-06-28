@@ -77,6 +77,16 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         if (requestCode == CAPTURE_PHOTO) {
             uri = data.getData();
             openNewCellphoneDialog(uri);
+
+            String[] projection = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(uri, projection, null, null,null);
+
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+
+            String path = cursor.getString(column_index);
+
+            Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
         }
         else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT);
