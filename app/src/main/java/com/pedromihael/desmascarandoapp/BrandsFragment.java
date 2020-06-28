@@ -1,19 +1,16 @@
 package com.pedromihael.desmascarandoapp;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class BrandsFragment extends Fragment implements RecyclerViewAdapter.OnPostListener {
@@ -50,7 +47,7 @@ public class BrandsFragment extends Fragment implements RecyclerViewAdapter.OnPo
         mView = inflater.inflate(R.layout.fragment_models, container, false);
 
         mRecyclerView = mView.findViewById(R.id.models_recyclerview);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mPostsList);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(mPostsList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
 

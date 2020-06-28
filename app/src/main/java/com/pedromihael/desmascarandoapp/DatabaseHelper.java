@@ -8,11 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -153,6 +149,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return results;
+    }
+
+    public void addPost(int user_id, double latitude, double longitude, String time) {
+        // o ID deve ser salvo nos dados de usuario logado
+        // junto com email e nome
+        // e deve ser passado pra cá quando for chamado
+
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("user_id", user_id);
+        cv.put("latitude", latitude);
+        cv.put("longitude", longitude);
+        cv.put("time", time);
+
+        db.insert("post", null, cv);
+
     }
 
 }

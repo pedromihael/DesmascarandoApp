@@ -1,16 +1,16 @@
 package com.pedromihael.desmascarandoapp.ui.login;
 
+import android.content.Context;
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.content.Context;
-import android.util.Patterns;
-
+import com.pedromihael.desmascarandoapp.R;
 import com.pedromihael.desmascarandoapp.data.LoginRepository;
 import com.pedromihael.desmascarandoapp.data.Result;
 import com.pedromihael.desmascarandoapp.data.model.LoggedInUser;
-import com.pedromihael.desmascarandoapp.R;
 
 public class LoginViewModel extends ViewModel {
 
@@ -37,7 +37,7 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName(), data.getUserId())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
