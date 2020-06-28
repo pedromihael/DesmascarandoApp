@@ -130,6 +130,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUiWithUser(LoggedInUserView model) {
         Intent homeIntent = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("displayName", model.getDisplayName());
+        bundle.putString("userID", "12311321");
+        homeIntent.putExtras(bundle);
         this.startActivity(homeIntent);
         Toast.makeText(this, "Bem-vindo(a),  " + model.getDisplayName(), Toast.LENGTH_SHORT).show();
     }

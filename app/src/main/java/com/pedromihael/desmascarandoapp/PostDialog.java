@@ -4,6 +4,7 @@ package com.pedromihael.desmascarandoapp;
  * NAO APAGAR!! VAMOS USAR PARA MOSTRAR INFORMACOES QUANDO CLICAR NUM PIN DO MAPA
  */
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -17,17 +18,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class PostDialog extends AppCompatDialogFragment {
 
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    private Activity mainActivity;
     private EditText mEditTextModel;
     private TextView mEditTextBrand;
     private Button mCancelButton;
@@ -35,13 +37,22 @@ public class PostDialog extends AppCompatDialogFragment {
     private DialogListener listener;
     private Uri uri;
     private ImageView img;
+    private DatabaseHelper dbHelper;
+    private Context context;
+    private ArrayList<Double> location = new ArrayList<>();
+    User author;
 
-    public PostDialog(Uri uri){
-        this.uri = uri;
+    public PostDialog(Uri uri, Context context, ArrayList<Double> location, User user) {
+        this.uri = uri; //endereco da foto
+        this.context = context;
+        this.mainActivity = (Activity) context;
+        this.location = location;
+        this.author = user;
     }
 
-    public PostDialog(){
+    public PostDialog() {
     }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -56,40 +67,30 @@ public class PostDialog extends AppCompatDialogFragment {
         mConfirmButton = view.findViewById(R.id.confirm_button);
 
         /* Ele seta o horario do post e a imagem selecionada da galeria */
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM, yyyy - HH:mm");
         Date date = new Date();
-        String dateformatted = dateFormat.format(date);
+        String dateFormatted = dateFormat.format(date);
         mEditTextBrand = view.findViewById(R.id.edit_brand);
-        mEditTextBrand.setText(dateformatted);
+        mEditTextBrand.setText(dateFormatted);
 
-        //Toast.makeText(getActivity(), mEditTextBrand.getText(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), mEditTextBrand.getText(), Toast.LENGTH_LONG).show();
         img = view.findViewById(R.id.imagem_da_galeria);
         img.setImageURI(uri);
         /**/
 
         mCancelButton.setOnClickListener((v) -> this.dismiss());
+
         mConfirmButton.setOnClickListener((v) -> {
-            Cellphone cellphone = null;
-            String brand = mEditTextBrand.getText().toString();
-            String model = mEditTextModel.getText().toString();
-            CellPhoneOpenHelper helper = new CellPhoneOpenHelper(getContext());
-
-            /* if (hasNotNullAssurance(model, brand)) {
-                if (isBrand(model, brand)) {
-                    cellphone = new Cellphone(brand);
-                } else if (isDevice(model)) {
-                    cellphone = new Cellphone(model, brand);
-                }
-
-                listener.persistNewCellphoneData(cellphone, helper);
-                this.dismiss();
-
-            } else {
-                Toast.makeText(view.getContext(),
-            "Para cadastrar um dispositivo, insira todos os campos. Para cadastrar uma marca, insira apenas a marca",
-                Toast.LENGTH_SHORT).show();
-            } */
-
+            //adicionar ao banco
+            /*
+            * time:
+            * DateFormat dateFormat = new SimpleDateFormat("yyyyMMdHHmmss");
+              Date date = new Date();
+              String timestamp = dateFormat.format(date);
+            * latitude: location.get(0)
+            * longitude: location.get(1)
+            * post_id: this.author.getUser_id() + @ + timestamp
+            * */
         });
 
         mEditTextBrand = view.findViewById(R.id.edit_brand);
@@ -99,16 +100,16 @@ public class PostDialog extends AppCompatDialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
             listener = (DialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement DialogListener");
         }
-
     }
 
-    public interface DialogListener { }
+    public interface DialogListener {
+    }
 }
 
