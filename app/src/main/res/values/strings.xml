@@ -36,4 +36,21 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="register_link">Cadastre-se agora</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="desmascarando_title">DESMASCARANDO</string>
+    <string name="login_e_mail">E-mail</string>
+    <string name="senha_login">Senha</string>
+    <string name="register_e_mail">E-mail</string>
+    <string name="nome_register">Nome</string>
+    <string name="senha_register">Senha</string>
+    <string name="nome_card">Fulano de t•al</string>
+    <string name="hora_card">08:00</string>
+    <string name="ver_no_mapa">Ver no mapa</string>
 </resources>

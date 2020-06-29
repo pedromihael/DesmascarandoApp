@@ -33,12 +33,6 @@ public class PostsFragment extends Fragment implements RecyclerViewAdapter.OnPos
         super.onCreate(savedInstanceState);
         DatabaseHelper helper = new DatabaseHelper(getActivity());
         mPostsList = new ArrayList<>();
-        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
-        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
-        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
-        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
-        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
-
         //Toast.makeText(getContext(), helper.getPosts().get(0).getPost_id(), Toast.LENGTH_SHORT).show();
 
         mPostsList.addAll(helper.getPosts());

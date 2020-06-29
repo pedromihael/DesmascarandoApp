@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext = null;
     private static final String DATABASE_NAME = "desmascarando.db";
-    private static final Integer DATABASE_VERSION = 2;
+    private static final Integer DATABASE_VERSION = 3;
     SQLiteDatabase db = null;
 
     public DatabaseHelper() { super(null, DATABASE_NAME, null, DATABASE_VERSION); }
@@ -162,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             db.insert("post", null, cv);
-            Toast.makeText(mContext, "postID" + post_id, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "foto tirada em: " + latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
         } catch (SQLiteException e) {
             Log.d("IsertionFailed", "addPost: " + e.toString());
         }

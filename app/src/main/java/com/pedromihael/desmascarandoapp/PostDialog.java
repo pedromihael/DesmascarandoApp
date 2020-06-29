@@ -93,6 +93,7 @@ public class PostDialog extends AppCompatDialogFragment {
         img = view.findViewById(R.id.imagem_da_galeria);
         img.setImageBitmap(resize(bitmap, 960,1280));
         String path = saveImage(bitmap);
+        img.setImageBitmap(bitmap);
 //        Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
 //        try {
 //            getPhotoDetails(path);
@@ -106,10 +107,10 @@ public class PostDialog extends AppCompatDialogFragment {
 
         mConfirmButton.setOnClickListener((v) -> {
             // BD persist
-            DateFormat dateFormatToPost = new SimpleDateFormat("yyyyMMdHHmmss");
+            DateFormat dateFormatToPost = new SimpleDateFormat("EEE, d MMM, yyyy - HH:mm");
             String timestamp = dateFormatToPost.format(date);
-            double latitude = location.get(0);
-            double longitude = location.get(1);
+            double latitude = this.location.get(0);
+            double longitude = this.location.get(1);
            // String post_id = this.author.getUser_id() + "@" + timestamp;
             String post_id = "1-" + timestamp;
             dbHelper = new DatabaseHelper(this.context);
@@ -135,8 +136,6 @@ public class PostDialog extends AppCompatDialogFragment {
     private void getPhotoDetails(String filepath) throws IOException {
         ExifInterface exif = new ExifInterface(filepath);
         String teste = exif.getAttribute(ExifInterface.TAG_IMAGE_LENGTH);
-//        String teste2 = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-//        String teste3 = exif.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
 
         Toast.makeText(getActivity(), teste, Toast.LENGTH_LONG).show();
     }
@@ -146,7 +145,6 @@ public class PostDialog extends AppCompatDialogFragment {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100 , bytes);
         File directory = new File(
                 Environment.getExternalStorageDirectory() + "/Desmascarados_images");
-        // Criando o diretório caso ele não exista!
         if (!directory.exists()) {
             directory.mkdirs();
         }
