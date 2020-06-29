@@ -76,7 +76,7 @@ public class PostDialog extends AppCompatDialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.new_post_dialog, null); // trocar para dialog padrao
+        View view = inflater.inflate(R.layout.new_post_dialog, null);
 
         builder.setView(view);
 

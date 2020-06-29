@@ -139,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 post_id = cursor.getString(cursor.getColumnIndex("post_id"));
                 user_id = cursor.getInt(cursor.getColumnIndex("user_id_fk"));
 
-                Post post = new Post("author1", latitude, longitude, time, post_id);
+                Post post = new Post("Pedro", latitude, longitude, time, post_id);
                 results.add(post);
 
             }

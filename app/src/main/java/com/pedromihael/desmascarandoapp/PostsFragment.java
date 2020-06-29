@@ -53,7 +53,10 @@ public class PostsFragment extends Fragment implements RecyclerViewAdapter.OnPos
 
     @Override
     public void onPostClick(int position) {
+
         Post clickedPost = mPostsList.get(position);
+        MapDialogFragment mapFrag = new MapDialogFragment(clickedPost);
+        mapFrag.show(requireActivity().getSupportFragmentManager(), "Local do post");
     }
 
 }
