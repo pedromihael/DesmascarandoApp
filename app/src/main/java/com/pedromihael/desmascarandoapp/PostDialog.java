@@ -48,7 +48,7 @@ public class PostDialog extends AppCompatDialogFragment {
     private ImageView img;
     private DatabaseHelper dbHelper;
     private Context context;
-    private ArrayList<Double> location = new ArrayList<>();
+    private ArrayList<Double> location;
     private User author;
     private Bitmap bitmap;
 
@@ -90,7 +90,6 @@ public class PostDialog extends AppCompatDialogFragment {
         mEditTextBrand = view.findViewById(R.id.edit_brand);
         mEditTextBrand.setText(dateFormatted);
 
-        Toast.makeText(getActivity(), mEditTextBrand.getText(), Toast.LENGTH_LONG).show();
         img = view.findViewById(R.id.imagem_da_galeria);
         img.setImageBitmap(resize(bitmap, 960,1280));
         String path = saveImage(bitmap);
@@ -109,11 +108,12 @@ public class PostDialog extends AppCompatDialogFragment {
             // BD persist
             DateFormat dateFormatToPost = new SimpleDateFormat("yyyyMMdHHmmss");
             String timestamp = dateFormatToPost.format(date);
-            double latitde = location.get(0);
+            double latitude = location.get(0);
             double longitude = location.get(1);
-            String post_id = this.author.getUser_id() + "@" + timestamp;
+           // String post_id = this.author.getUser_id() + "@" + timestamp;
+            String post_id = "1-" + timestamp;
             dbHelper = new DatabaseHelper(this.context);
-            dbHelper.addPost(1, post_id, latitde, longitude, timestamp);
+            dbHelper.addPost(1, post_id, latitude, longitude, timestamp);
 
             getDialog().dismiss();
         });

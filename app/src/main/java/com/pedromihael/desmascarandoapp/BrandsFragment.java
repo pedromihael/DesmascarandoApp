@@ -44,9 +44,9 @@ public class BrandsFragment extends Fragment implements RecyclerViewAdapter.OnPo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_models, container, false);
+        mView = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        mRecyclerView = mView.findViewById(R.id.models_recyclerview);
+        mRecyclerView = mView.findViewById(R.id.posts_recyclerview);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(mPostsList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);

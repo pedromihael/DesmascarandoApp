@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "time VARCHAR(128) NOT NULL, " +
                     "longitude DOUBLE NOT NULL, " +
                     "latitude DOUBLE NOT NULL, " +
-                    "post_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "post_id VARCHAR(128) PRIMARY KEY," +
                     "user_id_fk INTEGER, FOREIGN KEY (user_id_fk) REFERENCES user (user_id)" +
                     " );";
 
@@ -53,9 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        sqLiteDatabase.execSQL(dropUserTable);
-        sqLiteDatabase.execSQL(dropPostTable);
-        this.onCreate(sqLiteDatabase);
+
     }
 
     public boolean addUser(User user) {
@@ -123,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /* NAO TA FUNCIONANDO AINDA */
     public ArrayList<Post> getPosts() {
-        String query = "SELECT * FROM post;";
+        String query = "SELECT time, longitude, latitude, post_id, user_id_fk FROM post;";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -131,21 +129,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
-                String author, time, post_id;
+                String time, post_id;
                 double latitude, longitude;
+                int user_id;
 
-                author = cursor.getString(cursor.getColumnIndex("author"));
-                latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+               time = cursor.getString(cursor.getColumnIndex("time"));
                 longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
-                time = cursor.getString(cursor.getColumnIndex("time"));
+                latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
                 post_id = cursor.getString(cursor.getColumnIndex("post_id"));
+                user_id = cursor.getInt(cursor.getColumnIndex("user_id_fk"));
 
-                Post post = new Post(author, latitude, longitude, time, post_id);
+                Post post = new Post("author1", latitude, longitude, time, post_id);
+                results.add(post);
 
-                if (!author.equals("")) {
-                    Toast.makeText(mContext, "class - " + post_id, Toast.LENGTH_SHORT).show();
-                    results.add(post);
-                }
             }
         }
 
@@ -159,12 +155,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put("user_id_fk", user_id);
-        cv.put("latitude", latitude);
-        cv.put("longitude", longitude);
         cv.put("time", time);
         cv.put("post_id", post_id);
+        cv.put("latitude", latitude);
+        cv.put("longitude", longitude);
 
-        db.insert("post", null, cv);
+        try {
+            db.insert("post", null, cv);
+            Toast.makeText(mContext, "postID" + post_id, Toast.LENGTH_SHORT).show();
+        } catch (SQLiteException e) {
+            Log.d("IsertionFailed", "addPost: " + e.toString());
+        }
+
     }
 
 }

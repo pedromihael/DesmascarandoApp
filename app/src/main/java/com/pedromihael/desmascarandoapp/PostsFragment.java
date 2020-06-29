@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ModelsFragment extends Fragment implements RecyclerViewAdapter.OnPostListener{
+public class PostsFragment extends Fragment implements RecyclerViewAdapter.OnPostListener{
 
     View mView;
     private RecyclerView mRecyclerView;
@@ -26,27 +26,30 @@ public class ModelsFragment extends Fragment implements RecyclerViewAdapter.OnPo
         this.mPostsList = mPostsList;
     }
 
-    public ModelsFragment() { }
+    public PostsFragment() { }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         DatabaseHelper helper = new DatabaseHelper(getActivity());
-
         mPostsList = new ArrayList<>();
+        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
+        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
+        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
+        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
+        mPostsList.add(new Post("author", 123.0, 321.0, "horario00", "postid"));
 
-       for (Post item : helper.getPosts()) {
-           mPostsList.add(item);
-       }
+        //Toast.makeText(getContext(), helper.getPosts().get(0).getPost_id(), Toast.LENGTH_SHORT).show();
+
+        mPostsList.addAll(helper.getPosts());
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_models, container, false);
+        mView = inflater.inflate(R.layout.fragment_posts, container, false);
 
-        mRecyclerView = mView.findViewById(R.id.models_recyclerview);
+        mRecyclerView = mView.findViewById(R.id.posts_recyclerview);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(mPostsList, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(adapter);
@@ -57,8 +60,6 @@ public class ModelsFragment extends Fragment implements RecyclerViewAdapter.OnPo
     @Override
     public void onPostClick(int position) {
         Post clickedPost = mPostsList.get(position);
-        PostDialog dialog = new PostDialog();
-        dialog.show(requireActivity().getSupportFragmentManager(), "Post from ");
     }
 
 }

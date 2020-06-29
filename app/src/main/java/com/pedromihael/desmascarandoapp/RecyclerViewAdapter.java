@@ -24,13 +24,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // trocar para layout de card atualizado
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item_model, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
         return new ViewHolder(view, mOnPostListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.author.setText(mPosts.get(position).getAuthor());
+        holder.time.setText(mPosts.get(position).getTime());
+    }
+
+    public void updateAdapter() {
+        notifyDataSetChanged();
     }
 
     @Override
@@ -41,11 +46,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView author;
+        TextView time;
         OnPostListener onPostListener;
 
         public ViewHolder(@NonNull View itemView, OnPostListener onPostListener) {
             super(itemView);
-            author = itemView.findViewById(R.id.card_text_brand);
+            author = itemView.findViewById(R.id.card_text_author);
+            time = itemView.findViewById(R.id.card_text_time);
             this.onPostListener = onPostListener;
             itemView.setOnClickListener(this); // faz com que o observer aja em toda a tela
         }

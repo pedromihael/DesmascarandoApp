@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         bundle.putString("userID", "12311321");
         homeIntent.putExtras(bundle);
         this.startActivity(homeIntent);
-        Toast.makeText(this, "Bem-vindo(a),  " + model.getDisplayName(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Bem-vindo(a),  " + model.getDisplayName(), Toast.LENGTH_SHORT).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
