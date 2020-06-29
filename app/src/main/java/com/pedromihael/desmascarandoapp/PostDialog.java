@@ -69,6 +69,7 @@ public class PostDialog extends AppCompatDialogFragment {
     }
 
     public PostDialog() {
+        System.out.println("testing");
     }
 
     @Override
