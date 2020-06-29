@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(new PostsFragment(), "Desmascarados");
-        viewPagerAdapter.addFragment(new BrandsFragment(), "Mapa");
+        viewPagerAdapter.addFragment(new MapsFragment(), "Mapa");
 
         mViewPager.setAdapter(viewPagerAdapter); // sets up the adapter to the view pager
         mTabLayout.setupWithViewPager(mViewPager); // sets up the view pager (with adapter) to the corresponding tab

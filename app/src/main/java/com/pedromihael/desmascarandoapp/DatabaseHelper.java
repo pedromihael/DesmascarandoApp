@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext = null;
-    private static final String DATABASE_NAME = "desmascarando.db";
-    private static final Integer DATABASE_VERSION = 3;
+    private static final String DATABASE_NAME = "desmascarandoapp.db";
+    private static final Integer DATABASE_VERSION = 1;
     SQLiteDatabase db = null;
 
     public DatabaseHelper() { super(null, DATABASE_NAME, null, DATABASE_VERSION); }
