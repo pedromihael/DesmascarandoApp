@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -130,17 +131,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
-                String author, time;
+                String author, time, post_id;
                 double latitude, longitude;
 
                 author = cursor.getString(cursor.getColumnIndex("author"));
                 latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
-                longitude = cursor.getDouble(cursor.getColumnIndex("longiture"));
+                longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
                 time = cursor.getString(cursor.getColumnIndex("time"));
+                post_id = cursor.getString(cursor.getColumnIndex("post_id"));
 
-                Post post = new Post(author, latitude, longitude, time);
+                Post post = new Post(author, latitude, longitude, time, post_id);
 
                 if (!author.equals("")) {
+                    Toast.makeText(mContext, "class - " + post_id, Toast.LENGTH_SHORT).show();
                     results.add(post);
                 }
             }
@@ -151,21 +154,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return results;
     }
 
-    public void addPost(int user_id, double latitude, double longitude, String time) {
-        // o ID deve ser salvo nos dados de usuario logado
-        // junto com email e nome
-        // e deve ser passado pra cá quando for chamado
-
+    public void addPost(int user_id, String post_id, double latitude, double longitude, String time) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put("user_id", user_id);
+        cv.put("user_id_fk", user_id);
         cv.put("latitude", latitude);
         cv.put("longitude", longitude);
         cv.put("time", time);
+        cv.put("post_id", post_id);
 
         db.insert("post", null, cv);
-
     }
 
 }

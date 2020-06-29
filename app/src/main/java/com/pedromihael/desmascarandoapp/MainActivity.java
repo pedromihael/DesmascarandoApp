@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements PostDialog.DialogListener {
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     private TabLayout mTabLayout;
     private AppBarLayout mAppBarLayout;
     private ViewPager mViewPager;
+    private DatabaseHelper dbHelper;
 
     //Photo Variables
     private static final int PERMISSION_REQUEST_CODE = 200;
@@ -73,9 +75,13 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         mViewPager.setAdapter(viewPagerAdapter); // sets up the adapter to the view pager
         mTabLayout.setupWithViewPager(mViewPager); // sets up the view pager (with adapter) to the corresponding tab
 
-        /* Funcionalidade de postar foto */
-        /* BOTAO FLUTUANTE */
-//        img = findViewById(R.id.photo);
+        ArrayList<Post> postsList = new ArrayList<>();
+        dbHelper = new DatabaseHelper(this);
+        postsList = dbHelper.getPosts();
+
+        for(Post post : postsList) {
+            Toast.makeText(this, post.getPost_id(), Toast.LENGTH_SHORT).show();
+        }
 
         /* get location */
         if (ContextCompat.checkSelfPermission(
@@ -248,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 //                e.printStackTrace();
 //            }
             assert data != null;
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             openNewCellphoneDialog(bitmap);
             //Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
         }

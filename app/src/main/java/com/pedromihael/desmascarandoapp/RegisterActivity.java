@@ -1,7 +1,5 @@
 package com.pedromihael.desmascarandoapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -10,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.pedromihael.desmascarandoapp.ui.login.LoginActivity;
 
@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (dbHelper.addUser(user)) {
                     Toast.makeText(this, "Cadastrado com sucesso!", Toast.LENGTH_LONG).show();
-                    Intent homeIntent = new Intent(this, MainActivity.class);
+                    Intent homeIntent = new Intent(this, LoginActivity.class);
                     this.startActivity(homeIntent);
                     this.finish();
                 } else {

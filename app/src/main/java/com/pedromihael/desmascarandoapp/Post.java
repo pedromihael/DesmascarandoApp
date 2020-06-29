@@ -1,19 +1,19 @@
 package com.pedromihael.desmascarandoapp;
 
-import java.util.Date;
-
 public class Post {
 
     private Double latitude;
     private Double longitude;
     private String time;
     private String author;
+    private String post_id;
 
-    public Post(String author, Double latitude, Double longitude, String time) {
+    public Post(String author, Double latitude, Double longitude, String time, String post_id) {
         this.author = author;
         this.latitude = latitude;
         this.longitude = longitude;
         this.time = time;
+        this.post_id = post_id;
     }
 
     public Post() {
@@ -46,6 +46,10 @@ public class Post {
     public String getAuthor() { return author; }
 
     public void setAuthor(String author) { this.author = author; }
+
+    public String getPost_id() { return post_id; }
+
+    public void setPost_id(String post_id) { this.post_id = post_id; }
 
 
 }

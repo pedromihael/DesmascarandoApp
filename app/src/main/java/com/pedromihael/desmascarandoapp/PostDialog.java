@@ -103,41 +103,18 @@ public class PostDialog extends AppCompatDialogFragment {
 
         //Toast.makeText(getActivity(), "Image Saved!", Toast.LENGTH_SHORT).show();
 
-        /**/
-
         mCancelButton.setOnClickListener((v) -> this.dismiss());
 
         mConfirmButton.setOnClickListener((v) -> {
-            //adicionar ao banco
-            /*
-            * time:
-            * DateFormat dateFormat = new SimpleDateFormat("yyyyMMdHHmmss");
-              Date date = new Date();
-              String timestamp = dateFormat.format(date);
-            * latitude: location.get(0)
-            * longitude: location.get(1)
-            * post_id: this.author.getUser_id() + @ + timestamp
-            * */
-            Cellphone cellphone = null;
-            String brand = mEditTextBrand.getText().toString();
-            String model = mEditTextModel.getText().toString();
-            CellPhoneOpenHelper helper = new CellPhoneOpenHelper(getContext());
+            // BD persist
+            DateFormat dateFormatToPost = new SimpleDateFormat("yyyyMMdHHmmss");
+            String timestamp = dateFormatToPost.format(date);
+            double latitde = location.get(0);
+            double longitude = location.get(1);
+            String post_id = this.author.getUser_id() + "@" + timestamp;
+            dbHelper = new DatabaseHelper(this.context);
+            dbHelper.addPost(1, post_id, latitde, longitude, timestamp);
 
-            /* if (hasNotNullAssurance(model, brand)) {
-                if (isBrand(model, brand)) {
-                    cellphone = new Cellphone(brand);
-                } else if (isDevice(model)) {
-                    cellphone = new Cellphone(model, brand);
-                }
-
-                listener.persistNewCellphoneData(cellphone, helper);
-                this.dismiss();
-
-            } else {
-                Toast.makeText(view.getContext(),
-            "Para cadastrar um dispositivo, insira todos os campos. Para cadastrar uma marca, insira apenas a marca",
-                Toast.LENGTH_SHORT).show();
-            } */
             getDialog().dismiss();
         });
 
@@ -166,7 +143,7 @@ public class PostDialog extends AppCompatDialogFragment {
 
     private String saveImage(Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100 , bytes);
         File directory = new File(
                 Environment.getExternalStorageDirectory() + "/Desmascarados_images");
         // Criando o diretório caso ele não exista!
