@@ -43,13 +43,18 @@ public class RegisterActivity extends AppCompatActivity {
                 User user = new User(mName, mUsername, mPassword);
                 loadingProgressBar.setVisibility(View.VISIBLE);
 
-                if (dbHelper.addUser(user)) {
-                    Toast.makeText(this, "Cadastrado com sucesso!", Toast.LENGTH_LONG).show();
-                    Intent homeIntent = new Intent(this, LoginActivity.class);
-                    this.startActivity(homeIntent);
-                    this.finish();
+                if (!dbHelper.isUserRegistered(mUsername)) {
+                    if (dbHelper.addUser(user)) {
+                        Toast.makeText(this, "Cadastrado com sucesso!", Toast.LENGTH_LONG).show();
+                        Intent homeIntent = new Intent(this, LoginActivity.class);
+                        this.startActivity(homeIntent);
+                        this.finish();
+                    } else {
+                        Toast.makeText(this, "Falha ao cadastrar! Tente novamente.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(this, "Falha ao cadastrar! Tente novamente.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Usuário já cadastrado.", Toast.LENGTH_LONG).show();
+                    loadingProgressBar.setVisibility(View.INVISIBLE);
                 }
 
             } else {

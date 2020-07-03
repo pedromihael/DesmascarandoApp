@@ -18,7 +18,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final Integer DATABASE_VERSION = 1;
     SQLiteDatabase db = null;
 
-    public DatabaseHelper() { super(null, DATABASE_NAME, null, DATABASE_VERSION); }
+    public DatabaseHelper() {
+        super(null, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -73,10 +75,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    public boolean isUserRegistered(String username) {
+        String query = "SELECT COUNT(*) AS n FROM user WHERE email = \""
+                + username + "\";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            if (cursor.getInt(cursor.getColumnIndex("n")) == 0) {
+                return false;
+            }
+        }
+
+        cursor.close();
+        return true;
+    }
+
     public boolean getUser(User user) {
-       String query = "SELECT COUNT(*) AS n FROM user WHERE email = \""
-            + user.getEmail() + "\" AND password = \""
-            + user.getPassword() + "\";";
+        String query = "SELECT COUNT(*) AS n FROM user WHERE email = \""
+                + user.getEmail() + "\" AND password = \""
+                + user.getPassword() + "\";";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -133,7 +152,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 double latitude, longitude;
                 int user_id;
 
-               time = cursor.getString(cursor.getColumnIndex("time"));
+                time = cursor.getString(cursor.getColumnIndex("time"));
                 longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
                 latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
                 post_id = cursor.getString(cursor.getColumnIndex("post_id"));

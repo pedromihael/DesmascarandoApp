@@ -1,12 +1,10 @@
 package com.pedromihael.desmascarandoapp.data;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.pedromihael.desmascarandoapp.DatabaseHelper;
 import com.pedromihael.desmascarandoapp.User;
 import com.pedromihael.desmascarandoapp.data.model.LoggedInUser;
-import com.pedromihael.desmascarandoapp.ui.login.LoginActivity;
 
 import java.io.IOException;
 
@@ -37,5 +35,6 @@ public class LoginDataSource {
 
     public void logout() {
         // TODO: revoke authentication
+        // how to: remove login from shared preferences
     }
 }

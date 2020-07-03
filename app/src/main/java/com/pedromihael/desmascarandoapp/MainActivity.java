@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     private Uri uri;
     private String imgPath;
     //End Photos
-    Intent thisIntent = new Intent(this, MainActivity.class);
-    Bundle bundleFromLogin = thisIntent.getExtras();
+    Bundle bundleFromLogin;
 
     ArrayList<Double> location;
 
@@ -62,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent thisIntent = new Intent(getApplicationContext(), MainActivity.class);
+        this.bundleFromLogin = thisIntent.getExtras();
 
         mTabLayout = findViewById(R.id.tabs);
         mAppBarLayout = findViewById(R.id.app_bar);
