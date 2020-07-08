@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -38,6 +39,7 @@ import java.util.Date;
 public class PostDialog extends AppCompatDialogFragment {
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    private static final int MODE_PRIVATE = 1;
     private Activity mainActivity;
     private EditText mEditTextModel;
     private TextView mEditTextBrand;
@@ -51,6 +53,8 @@ public class PostDialog extends AppCompatDialogFragment {
     private ArrayList<Double> location;
     private User author;
     private Bitmap bitmap;
+    private RecyclerViewAdapter adapter;
+    private ArrayList<Post> postList;
 
     public PostDialog(Bitmap bitmap, Context context, ArrayList<Double> location, User user) {
         this.bitmap = bitmap; //endereco da foto
@@ -58,6 +62,16 @@ public class PostDialog extends AppCompatDialogFragment {
         this.mainActivity = (Activity) context;
         this.location = location;
         this.author = user;
+    }
+
+    public PostDialog(Bitmap bitmap, Context context, ArrayList<Double> location, User user, RecyclerViewAdapter adapter, ArrayList<Post> postList) {
+        this.bitmap = bitmap; //endereco da foto
+        this.context = context;
+        this.mainActivity = (Activity) context;
+        this.location = location;
+        this.author = user;
+        this.adapter = adapter;
+        this.postList = postList;
     }
 
     public PostDialog(Uri uri, Context context, ArrayList<Double> location, User user) {
@@ -115,6 +129,15 @@ public class PostDialog extends AppCompatDialogFragment {
             String post_id = "1-" + timestamp;
             dbHelper = new DatabaseHelper(this.context);
             dbHelper.addPost(1, post_id, latitude, longitude, timestamp);
+
+            SharedPreferences sp = context.getSharedPreferences("Login", Context.MODE_PRIVATE);
+            String author = sp.getString("username", null);
+
+            Post newPost = new Post(author, latitude, longitude, timestamp, post_id);
+            ArrayList<Post> auxList = new ArrayList<>();
+            auxList.add(newPost);
+            auxList.addAll(this.postList);
+            adapter.insertData(auxList);
 
             getDialog().dismiss();
         });

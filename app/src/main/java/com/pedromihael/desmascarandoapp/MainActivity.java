@@ -24,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.location.LocationCallback;
@@ -55,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     //End Photos
     Bundle bundleFromLogin;
 
-    ArrayList<Double> location;
+    private ArrayList<Double> location;
+    private ArrayList<Post> postsList = new ArrayList<>();
 
     //Location Variables
     //private FusedLocationProviderClient fusedLocationClient;
@@ -100,13 +103,8 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         mViewPager.setAdapter(viewPagerAdapter); // sets up the adapter to the view pager
         mTabLayout.setupWithViewPager(mViewPager); // sets up the view pager (with adapter) to the corresponding tab
 
-        ArrayList<Post> postsList = new ArrayList<>();
         dbHelper = new DatabaseHelper(this);
-        postsList = dbHelper.getPosts();
-
-        for(Post post : postsList) {
-            Toast.makeText(this, post.getPost_id(), Toast.LENGTH_SHORT).show();
-        }
+        this.postsList = dbHelper.getPosts();
 
         /* get location */
         if (ContextCompat.checkSelfPermission(
@@ -213,9 +211,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     @Override
     public void onResume() {
         super.onResume();
-        if (checkPermission()) {
-            // Success
-        } else {
+        if (!checkPermission()) {
             requestPermission();
         }
     }
@@ -278,10 +274,20 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
+
+            RecyclerView recyclerView = findViewById(R.id.posts_recyclerview);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+
+            final RecyclerViewAdapter adapter = new RecyclerViewAdapter(postsList);
+            recyclerView.setAdapter(adapter);
+
             assert data != null;
             Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-            openNewCellphoneDialog(bitmap);
-            //Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
+            openNewCellphoneDialog(bitmap, adapter, postsList);
+
+
+
         }
         else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
@@ -297,10 +303,10 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         Toast.makeText(this, teste, Toast.LENGTH_SHORT).show();
     }
 
-    private void openNewCellphoneDialog(Bitmap bitmap) {
+    private void openNewCellphoneDialog(Bitmap bitmap, RecyclerViewAdapter adapter, ArrayList<Post> posts) {
         User author = new User("0");
         // trocar userID acima pelo passado no bundle (está vindo nulo)
-        PostDialog dialog = new PostDialog(bitmap, this, location, author);
+        PostDialog dialog = new PostDialog(bitmap, this, location, author, adapter, postsList);
         dialog.show(getSupportFragmentManager(), "New Post");
     }
 

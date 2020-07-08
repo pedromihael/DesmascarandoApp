@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext = null;
     private static final String DATABASE_NAME = "desmascarandoapp.db";
-    private static final Integer DATABASE_VERSION = 1;
+    private static final Integer DATABASE_VERSION = 2;
     SQLiteDatabase db = null;
 
     public DatabaseHelper() {
@@ -140,7 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /* NAO TA FUNCIONANDO AINDA */
     public ArrayList<Post> getPosts() {
-        String query = "SELECT time, longitude, latitude, post_id, user_id_fk FROM post;";
+        String query = "SELECT time, longitude, latitude, post_id, user_id_fk FROM post ORDER BY time DESC;";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
