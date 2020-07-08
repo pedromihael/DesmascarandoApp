@@ -13,6 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.pedromihael.desmascarandoapp.ui.login.LoginActivity;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private final DatabaseHelper dbHelper = new DatabaseHelper(this);
@@ -37,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> {
             String mName = nameEditText.getText().toString();
             String mUsername = usernameEditText.getText().toString();
-            String mPassword = passwordEditText.getText().toString();
+            String mPassword = encrypt(passwordEditText.getText().toString());
 
             if (isFormValid(mName, mUsername, mPassword)) {
                 User user = new User(mName, mUsername, mPassword);
@@ -70,5 +75,17 @@ public class RegisterActivity extends AppCompatActivity {
         if (password.length() == 0 || password.trim().length() <= 5) { return false; }
 
         return true;
+    }
+
+    private String encrypt(String password) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = digest != null ? digest.digest(password.getBytes(StandardCharsets.UTF_8)) : new byte[0];
+
+        return Arrays.toString(hash);
     }
 }

@@ -26,6 +26,11 @@ import com.pedromihael.desmascarandoapp.MainActivity;
 import com.pedromihael.desmascarandoapp.R;
 import com.pedromihael.desmascarandoapp.RegisterActivity;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
@@ -47,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString(),
-                    passwordEditText.getText().toString(), this);
+                    encrypt(passwordEditText.getText().toString()), this);
         });
 
         registerButton.setOnClickListener(view -> {
@@ -89,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences sp = getSharedPreferences("Login", MODE_PRIVATE);
                     SharedPreferences.Editor Ed = sp.edit();
                     Ed.putString("username", usernameEditText.getText().toString());
-                    Ed.putString("password", passwordEditText.getText().toString());
+                    Ed.putString("password", encrypt(passwordEditText.getText().toString()));
                     Ed.apply();
 
                     updateUiWithUser(loginResult.getSuccess());
@@ -109,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                        encrypt(passwordEditText.getText().toString()));
             }
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
@@ -120,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString(), getApplicationContext());
+                            encrypt(passwordEditText.getText().toString()), getApplicationContext());
                 }
                 return false;
             }
@@ -140,5 +145,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private String encrypt(String password) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = digest != null ? digest.digest(password.getBytes(StandardCharsets.UTF_8)) : new byte[0];
+
+        return Arrays.toString(hash);
     }
 }
