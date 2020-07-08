@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
@@ -12,12 +13,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
@@ -29,6 +33,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.pedromihael.desmascarandoapp.ui.login.LoginActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +72,25 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         mTabLayout = findViewById(R.id.tabs);
         mAppBarLayout = findViewById(R.id.app_bar);
         mViewPager = findViewById(R.id.view_pager);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        /** verifica se já está logado usando shared preferences **/
+
+        SharedPreferences sp = this.getSharedPreferences("Login", MODE_PRIVATE);
+
+        String username = sp.getString("username", null);
+        String password = sp.getString("password", null);
+        User user = new User(username, password);
+        dbHelper = new DatabaseHelper(this);
+
+        if (!dbHelper.getUser(user)) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
+
+        /** continua caso ja esteja logado **/
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -278,6 +302,33 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         // trocar userID acima pelo passado no bundle (está vindo nulo)
         PostDialog dialog = new PostDialog(bitmap, this, location, author);
         dialog.show(getSupportFragmentManager(), "New Post");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings_logout) {
+
+            SharedPreferences sp = getSharedPreferences("Login", MODE_PRIVATE);
+            SharedPreferences.Editor Ed = sp.edit();
+            Ed.putString("username",null);
+            Ed.putString("password",null);
+            Ed.apply();
+
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
