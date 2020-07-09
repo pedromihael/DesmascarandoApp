@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/dialog_title"
         android:layout_marginBottom="20dp"
-        android:text="Horario"
+        android:text="@string/horario_dialog"
         android:textColor="@color/textNormal"
         android:textSize="14sp"
         android:textStyle="italic" />
@@ -52,7 +52,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
-            android:text="Cancelar"
+            android:text="@string/cancelar_dialog"
             android:textColor="@color/negative_option" />
 
         <Button
@@ -62,7 +62,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
-            android:text="Adicionar"
+            android:text="@string/adicionar_dialog"
             android:textColor="@drawable/button_ui_behaviour"
             android:textStyle="bold" />
 

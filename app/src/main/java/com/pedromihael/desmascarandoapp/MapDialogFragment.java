@@ -59,6 +59,8 @@ public class MapDialogFragment extends DialogFragment
         LatLng location = new LatLng(this.lat,this.longi);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
 
+
+
         googleMap.addMarker(new MarkerOptions().position(location).title("Pessoa sem másca - " + this.time));
         mMap.setMyLocationEnabled(true);
 

@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:background="@null"
-            android:text="Cancelar"
+            android:text="@string/cancelar_alter_name"
             android:textColor="@color/negative_option" />
 
         <Button
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:background="@null"
-            android:text="Alterar"
+            android:text="@string/alterar_alter_name"
             android:textColor="@drawable/button_ui_behaviour"
             android:textStyle="bold" />
 

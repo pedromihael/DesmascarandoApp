@@ -54,4 +54,11 @@
     <string name="hora_card">08:00</string>
     <string name="ver_no_mapa">Ver no mapa</string>
     <string name="action_settings_alter_name">Alterar nome</string>
+    <string name="desmascarando_upper">DESMASCARANDO</string>
+    <string name="cancelar_alter_name">Cancelar</string>
+    <string name="alterar_alter_name">Alterar</string>
+    <string name="pessoa_sem_m_scara_aqui">Pessoa sem máscara aqui</string>
+    <string name="horario_dialog">Horario</string>
+    <string name="cancelar_dialog">Cancelar</string>
+    <string name="adicionar_dialog">Adicionar</string>
 </resources>
