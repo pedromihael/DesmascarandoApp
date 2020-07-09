@@ -7,6 +7,16 @@ public class Post {
     private String time;
     private String author;
     private String post_id;
+    private String filePath;
+
+    public Post(String author, Double latitude, Double longitude, String time, String post_id, String filePath) {
+        this.author = author;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.time = time;
+        this.post_id = post_id;
+        this.filePath = filePath;
+    }
 
     public Post(String author, Double latitude, Double longitude, String time, String post_id) {
         this.author = author;
@@ -50,6 +60,10 @@ public class Post {
     public String getPost_id() { return post_id; }
 
     public void setPost_id(String post_id) { this.post_id = post_id; }
+
+    public String getFilePath() { return filePath; }
+
+    public void setFilePath(String filePath) { this.filePath = filePath; }
 
 
 }

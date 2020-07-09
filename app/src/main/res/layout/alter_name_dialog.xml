@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/dialog_title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edit_model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_title"
+        android:layout_alignParentStart="true"
+        android:hint="@string/dialog_placeholder_model"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:theme="@style/editTextStyle" />
+
+    <EditText
+        android:id="@+id/edit_brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_model"
+        android:layout_alignParentStart="true"
+        android:hint="@string/dialog_placeholder_brand"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:theme="@style/editTextStyle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_brand"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel_button"
+            style="@android:style/Widget.Material.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@null"
+            android:text="Cancelar"
+            android:textColor="@color/negative_option" />
+
+        <Button
+            android:id="@+id/confirm_button"
+            style="@android:style/Widget.Material.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@null"
+            android:text="Alterar"
+            android:textColor="@drawable/button_ui_behaviour"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</RelativeLayout>

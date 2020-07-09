@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext = null;
     private static final String DATABASE_NAME = "desmascarandoapp.db";
-    private static final Integer DATABASE_VERSION = 2;
+    private static final Integer DATABASE_VERSION = 4;
     SQLiteDatabase db = null;
 
     public DatabaseHelper() {
@@ -42,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "time VARCHAR(128) NOT NULL, " +
                     "longitude DOUBLE NOT NULL, " +
                     "latitude DOUBLE NOT NULL, " +
+                    "file_path VARCHAR(256) NOT NULL," +
                     "post_id VARCHAR(128) PRIMARY KEY," +
                     "user_id_fk INTEGER, FOREIGN KEY (user_id_fk) REFERENCES user (user_id)" +
                     " );";
@@ -56,6 +56,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
 
+    }
+
+    public boolean alterName(String name, String email) {
+        String query = "ALTER TABLE user SET name = \"" + name + "\" " +
+                "WHERE email = \"" + email + "\";";
+        db = this.getWritableDatabase();
+        db.execSQL(query);
+
+        return true;
     }
 
     public boolean addUser(User user) {
@@ -140,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /* NAO TA FUNCIONANDO AINDA */
     public ArrayList<Post> getPosts() {
-        String query = "SELECT time, longitude, latitude, post_id, user_id_fk FROM post ORDER BY time DESC;";
+        String query = "SELECT time, longitude, latitude, file_path, post_id, user_id_fk FROM post ORDER BY time DESC;";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -148,17 +157,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
-                String time, post_id;
+                String time, post_id, filePath;
                 double latitude, longitude;
                 int user_id;
 
                 time = cursor.getString(cursor.getColumnIndex("time"));
                 longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
                 latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+                filePath = cursor.getString(cursor.getColumnIndex("file_path"));
                 post_id = cursor.getString(cursor.getColumnIndex("post_id"));
                 user_id = cursor.getInt(cursor.getColumnIndex("user_id_fk"));
 
-                Post post = new Post("Pedro", latitude, longitude, time, post_id);
+                Post post = new Post("Pedro", latitude, longitude, time, post_id, filePath);
                 results.add(post);
 
             }
@@ -169,7 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return results;
     }
 
-    public void addPost(int user_id, String post_id, double latitude, double longitude, String time) {
+    public void addPost(int user_id, String post_id, double latitude, double longitude, String time, String filePath) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -178,10 +188,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put("post_id", post_id);
         cv.put("latitude", latitude);
         cv.put("longitude", longitude);
+        cv.put("file_path", filePath);
 
         try {
             db.insert("post", null, cv);
-            Toast.makeText(mContext, "foto tirada em: " + latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
         } catch (SQLiteException e) {
             Log.d("IsertionFailed", "addPost: " + e.toString());
         }

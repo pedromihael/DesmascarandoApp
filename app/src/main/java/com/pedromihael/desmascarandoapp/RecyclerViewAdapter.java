@@ -3,6 +3,7 @@ package com.pedromihael.desmascarandoapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.author.setText(mPosts.get(position).getAuthor());
         holder.time.setText(mPosts.get(position).getTime());
+
+//        File imgFile = new  File(mPosts.get(position).getFilePath());
+//
+//        if(imgFile.exists()){
+//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//            holder.img.setImageBitmap(myBitmap);
+//        }
+
     }
 
     public void updateAdapter() {
@@ -58,12 +67,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         TextView author;
         TextView time;
+        ImageView img;
         OnPostListener onPostListener;
 
         public ViewHolder(@NonNull View itemView, OnPostListener onPostListener) {
             super(itemView);
             author = itemView.findViewById(R.id.card_text_author);
             time = itemView.findViewById(R.id.card_text_time);
+            img = itemView.findViewById(R.id.card_image);
             this.onPostListener = onPostListener;
             itemView.setOnClickListener(this); // faz com que o observer aja em toda a tela
         }

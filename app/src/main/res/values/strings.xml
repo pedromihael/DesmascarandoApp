@@ -3,10 +3,10 @@
     <string name="tab_text_1">Desmascarados</string>
     <string name="tab_text_2">Mapa</string>
 
-    <string name="dialog_placeholder_model">Endereço</string>
-    <string name="dialog_placeholder_brand">Horario</string>
+    <string name="dialog_placeholder_model">Novo nome</string>
+    <string name="dialog_placeholder_brand">Confirme seu email</string>
     <string name="dialog_placeholder_year">Ano do modelo</string>
-    <string name="dialog_title">Novo Post</string>
+    <string name="dialog_title">Alterar nome</string>
     <string name="dialog_negative_button">Cancelar</string>
     <string name="dialog_positive_button">Adicionar</string>
     <string name="card_brand_brand">Marca</string>
@@ -53,4 +53,5 @@
     <string name="nome_card">Fulano de t•al</string>
     <string name="hora_card">08:00</string>
     <string name="ver_no_mapa">Ver no mapa</string>
+    <string name="action_settings_alter_name">Alterar nome</string>
 </resources>

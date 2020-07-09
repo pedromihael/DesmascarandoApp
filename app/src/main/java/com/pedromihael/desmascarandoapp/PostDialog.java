@@ -13,7 +13,6 @@ import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class PostDialog extends AppCompatDialogFragment {
@@ -55,6 +53,8 @@ public class PostDialog extends AppCompatDialogFragment {
     private Bitmap bitmap;
     private RecyclerViewAdapter adapter;
     private ArrayList<Post> postList;
+    private String timestamp = "default_timestamp";
+    private String filePath = "default_path";
 
     public PostDialog(Bitmap bitmap, Context context, ArrayList<Double> location, User user) {
         this.bitmap = bitmap; //endereco da foto
@@ -106,29 +106,22 @@ public class PostDialog extends AppCompatDialogFragment {
 
         img = view.findViewById(R.id.imagem_da_galeria);
         img.setImageBitmap(resize(bitmap, 960,1280));
-        String path = saveImage(bitmap);
         img.setImageBitmap(bitmap);
-//        Toast.makeText(getActivity(), path, Toast.LENGTH_SHORT).show();
-//        try {
-//            getPhotoDetails(path);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
-        //Toast.makeText(getActivity(), "Image Saved!", Toast.LENGTH_SHORT).show();
+        this.filePath = saveImage(bitmap);
 
         mCancelButton.setOnClickListener((v) -> this.dismiss());
 
         mConfirmButton.setOnClickListener((v) -> {
             // BD persist
             DateFormat dateFormatToPost = new SimpleDateFormat("EEE, d MMM, yyyy - HH:mm");
-            String timestamp = dateFormatToPost.format(date);
+            this.timestamp = dateFormatToPost.format(date);
             double latitude = this.location.get(0);
             double longitude = this.location.get(1);
            // String post_id = this.author.getUser_id() + "@" + timestamp;
             String post_id = "1-" + timestamp;
             dbHelper = new DatabaseHelper(this.context);
-            dbHelper.addPost(1, post_id, latitude, longitude, timestamp);
+            dbHelper.addPost(1, post_id, latitude, longitude, timestamp, filePath);
 
             SharedPreferences sp = context.getSharedPreferences("Login", Context.MODE_PRIVATE);
             String author = sp.getString("username", null);
@@ -167,19 +160,26 @@ public class PostDialog extends AppCompatDialogFragment {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100 , bytes);
         File directory = new File(
-                Environment.getExternalStorageDirectory() + "/Desmascarados_images");
+                context.getFilesDir() + "/imgs");
         if (!directory.exists()) {
             directory.mkdirs();
         }
         try {
-            File fileImage = new File(directory, Calendar.getInstance().getTimeInMillis() + ".jpg");
+
+            Date date = new Date();
+            DateFormat dateFormatToPost = new SimpleDateFormat("yyyyMMdHHmm");
+            this.timestamp = dateFormatToPost.format(date);
+
+            File fileImage = new File(directory, this.author + "-" + this.timestamp + ".jpg");
             fileImage.createNewFile();
             FileOutputStream fo = new FileOutputStream(fileImage);
             fo.write(bytes.toByteArray());
+
             MediaScannerConnection.scanFile(getActivity(),
                     new String[]{fileImage.getPath()},
                     new String[]{"image/jpeg"}, null);
             fo.close();
+
             Log.d("TAG", "File Saved:->" + fileImage.getAbsolutePath());
             return fileImage.getAbsolutePath();
         } catch (IOException e1) {

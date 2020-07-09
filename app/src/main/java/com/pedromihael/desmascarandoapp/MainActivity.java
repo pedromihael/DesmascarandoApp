@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,11 +36,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.pedromihael.desmascarandoapp.ui.login.LoginActivity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements PostDialog.DialogListener {
+public class MainActivity extends AppCompatActivity implements PostDialog.DialogListener, AlterNameDialog.DialogListener {
 
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private TabLayout mTabLayout;
@@ -49,20 +47,15 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
     private ViewPager mViewPager;
     private DatabaseHelper dbHelper;
 
-    //Photo Variables
     private static final int PERMISSION_REQUEST_CODE = 200;
     private final int CAPTURE_PHOTO = 100;
     private Uri uri;
     private String imgPath;
-    //End Photos
+
     Bundle bundleFromLogin;
 
     private ArrayList<Double> location;
     private ArrayList<Post> postsList = new ArrayList<>();
-
-    //Location Variables
-    //private FusedLocationProviderClient fusedLocationClient;
-    //End Location
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,12 +118,6 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            /* Choosefrom gallery */
-//            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.setType("image/*");
-//            startActivityForResult(intent, CAPTURE_PHOTO);
-            /**/
-
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAPTURE_PHOTO);
 
@@ -184,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!=
                                 PackageManager.PERMISSION_GRANTED) {
-                            showMessageOKCancel("You need to allow access permissions",
+                            showMessageOKCancel("Tudo ok!",
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
@@ -256,28 +243,11 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_PHOTO) {
 
-            /*Choose from gallery*/
-//            uri = data.getData();
-//            String[] projection = { MediaStore.Images.Media.DATA };
-//            Cursor cursor = getContentResolver().query(uri, projection, null, null,null);
-//            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//            cursor.moveToFirst();
-//            String path = cursor.getString(column_index);
-
-
-            //openNewCellphoneDialog(uri);
-            /* */
-//            uri = data.getData();
-//            Bitmap bitmap = null;
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
             RecyclerView recyclerView = findViewById(R.id.posts_recyclerview);
             recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+            LinearLayoutManager linearLayout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true);
+            linearLayout.setStackFromEnd(true);
+            recyclerView.setLayoutManager(linearLayout);
 
             final RecyclerViewAdapter adapter = new RecyclerViewAdapter(postsList);
             recyclerView.setAdapter(adapter);
@@ -286,21 +256,10 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
             Bitmap bitmap = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
             openNewCellphoneDialog(bitmap, adapter, postsList);
 
-
-
         }
         else if (resultCode == RESULT_CANCELED) {
             Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void getPhotoDetails(String filepath) throws IOException {
-        ExifInterface exif = new ExifInterface(filepath);
-        String teste = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-//        String teste2 = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-//        String teste3 = exif.getAttribute(ExifInterface.TAG_GPS_TIMESTAMP);
-
-        Toast.makeText(this, teste, Toast.LENGTH_SHORT).show();
     }
 
     private void openNewCellphoneDialog(Bitmap bitmap, RecyclerViewAdapter adapter, ArrayList<Post> posts) {
@@ -312,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -332,9 +290,16 @@ public class MainActivity extends AppCompatActivity implements PostDialog.Dialog
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
             return true;
+        } else if (id == R.id.action_settings_alter_name) {
+            AlterNameDialog dialog = new AlterNameDialog();
+            dialog.show(getSupportFragmentManager(), "Alter name");
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void persistNewName(String name, String pass, DatabaseHelper helper) {
+//        helper.alterName(name, pass);
+    }
 }
